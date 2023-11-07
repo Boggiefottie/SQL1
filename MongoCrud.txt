@@ -1,0 +1,119 @@
+Last login: Tue Nov  7 20:09:53 on ttys000
+bhavyapratapsingh240203gmail.com@Bhavyas-MacBook-Pro ~ % mongosh
+Current Mongosh Log ID:	654a8768a01148d601529317
+Connecting to:		mongodb://127.0.0.1:27017/?directConnection=true&serverSelectionTimeoutMS=2000&appName=mongosh+1.10.6
+Using MongoDB:		7.0.0
+Using Mongosh:		1.10.6
+mongosh 2.0.2 is available for download: https://www.mongodb.com/try/download/shell
+
+For mongosh info see: https://docs.mongodb.com/mongodb-shell/
+
+------
+   The server generated these startup warnings when booting
+   2023-11-05T21:46:29.518+05:30: Access control is not enabled for the database. Read and write access to data and configuration is unrestricted
+------
+
+test> use dbms
+switched to db dbms
+dbms> db.student.insertMany([
+...   { stud_id: 1, stud_name: "Alice", dept: "Computer", marks: 60 },
+...   { stud_id: 2, stud_name: "Bob", dept: "Civil", marks: 40 },
+...   { stud_id: 3, stud_name: "Charlie", dept: "Chemical", marks: 70 },
+...   { stud_id: 4, stud_name: "David", dept: "Computer", marks: 55 },
+...   { stud_id: 5, stud_name: "Eve", dept: "Civil", marks: 45 }
+... ]);
+{
+  acknowledged: true,
+  insertedIds: {
+    '0': ObjectId("654a8772a01148d601529318"),
+    '1': ObjectId("654a8772a01148d601529319"),
+    '2': ObjectId("654a8772a01148d60152931a"),
+    '3': ObjectId("654a8772a01148d60152931b"),
+    '4': ObjectId("654a8772a01148d60152931c")
+  }
+}
+dbms> db.student.find({ marks: { $gt: 50 } });
+[
+  {
+    _id: ObjectId("654a8772a01148d601529318"),
+    stud_id: 1,
+    stud_name: 'Alice',
+    dept: 'Computer',
+    marks: 60
+  },
+  {
+    _id: ObjectId("654a8772a01148d60152931a"),
+    stud_id: 3,
+    stud_name: 'Charlie',
+    dept: 'Chemical',
+    marks: 70
+  },
+  {
+    _id: ObjectId("654a8772a01148d60152931b"),
+    stud_id: 4,
+    stud_name: 'David',
+    dept: 'Computer',
+    marks: 55
+  }
+]
+dbms> db.student.find({ marks: { $gte: 50, $lte: 80 } });
+[
+  {
+    _id: ObjectId("654a8772a01148d601529318"),
+    stud_id: 1,
+    stud_name: 'Alice',
+    dept: 'Computer',
+    marks: 60
+  },
+  {
+    _id: ObjectId("654a8772a01148d60152931a"),
+    stud_id: 3,
+    stud_name: 'Charlie',
+    dept: 'Chemical',
+    marks: 70
+  },
+  {
+    _id: ObjectId("654a8772a01148d60152931b"),
+    stud_id: 4,
+    stud_name: 'David',
+    dept: 'Computer',
+    marks: 55
+  }
+]
+dbms> db.student.find({ marks: { $gte: 50, $lte: 80 } });
+[
+  {
+    _id: ObjectId("654a8772a01148d601529318"),
+    stud_id: 1,
+    stud_name: 'Alice',
+    dept: 'Computer',
+    marks: 60
+  },
+  {
+    _id: ObjectId("654a8772a01148d60152931a"),
+    stud_id: 3,
+    stud_name: 'Charlie',
+    dept: 'Chemical',
+    marks: 70
+  },
+  {
+    _id: ObjectId("654a8772a01148d60152931b"),
+    stud_id: 4,
+    stud_name: 'David',
+    dept: 'Computer',
+    marks: 55
+  }
+]
+dbms> db.student.find({ dept: "Computer", marks: { $gt: 60 } });
+
+dbms> db.student.updateMany({ dept: "Civil" }, { $set: { marks: 30 } });
+{
+  acknowledged: true,
+  insertedId: null,
+  matchedCount: 2,
+  modifiedCount: 2,
+  upsertedCount: 0
+}
+dbms> db.student.deleteMany({ dept: "Chemical", marks: { $lt: 30 } });
+{ acknowledged: true, deletedCount: 0 }
+dbms>
