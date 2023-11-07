@@ -1,0 +1,29 @@
+-- Create the Library_Audit table if it doesn't exist
+CREATE TABLE Library_Audit (
+    AuditID NUMBER PRIMARY KEY,
+    LibraryID NUMBER,
+    BookTitle VARCHAR2(255),
+    Author VARCHAR2(255),
+    Action VARCHAR2(10), -- 'UPDATE' or 'DELETE'
+    AuditDate TIMESTAMP
+);
+
+-- Create a trigger for updates on the Library table
+CREATE OR REPLACE TRIGGER Library_Update_Trigger
+BEFORE UPDATE ON Library
+FOR EACH ROW
+BEGIN
+    INSERT INTO Library_Audit (LibraryID, BookTitle, Author, Action, AuditDate)
+    VALUES (:OLD.LibraryID, :OLD.BookTitle, :OLD.Author, 'UPDATE', SYSTIMESTAMP);
+END;
+/
+
+-- Create a trigger for deletions on the Library table
+CREATE OR REPLACE TRIGGER Library_Delete_Trigger
+BEFORE DELETE ON Library
+FOR EACH ROW
+BEGIN
+    INSERT INTO Library_Audit (LibraryID, BookTitle, Author, Action, AuditDate)
+    VALUES (:OLD.LibraryID, :OLD.BookTitle, :OLD.Author, 'DELETE', SYSTIMESTAMP);
+END;
+/
