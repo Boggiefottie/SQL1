@@ -1,0 +1,27 @@
+
+use mydb
+
+
+db.createCollection("books")
+
+db.books.insertMany([
+  { "book_id": 1, "title": "Book 1", "author": "Author A", "type": "Fiction" },
+  { "book_id": 2, "title": "Book 2", "author": "Author B", "type": "Non-fiction" },
+  { "book_id": 3, "title": "Book 3", "author": "Author A", "type": "Fiction" },
+  { "book_id": 4, "title": "Book 4", "author": "Author C", "type": "Mystery" }
+]);
+
+var mapFunction = function () {
+  emit(this.type, 1);
+};
+
+
+var reduceFunction = function (key, values) {
+  return Array.sum(values);
+};
+
+
+db.books.mapReduce(mapFunction, reduceFunction, { out: "book_counts" });
+
+
+db.book_counts.find();
